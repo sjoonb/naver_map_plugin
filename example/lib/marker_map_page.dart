@@ -19,28 +19,28 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      OverlayImage.fromAssetImage(
-        assetName: 'icon/marker.png',
-        context: context,
-      ).then((image) {
-        setState(() {
-          _markers.add(Marker(
-              markerId: 'id',
-              position: LatLng(37.563600, 126.962370),
-              captionText: "커스텀 아이콘",
-              captionColor: Colors.indigo,
-              captionTextSize: 20.0,
-              alpha: 0.8,
-              icon: image,
-              anchor: AnchorPoint(0.5, 1),
-              width: 45,
-              height: 45,
-              infoWindow: '인포 윈도우',
-              onMarkerTab: _onMarkerTap));
-        });
-      });
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final image = AssetImage('icon/marker.png');
+        {
+          setState(() {
+            _markers.add(Marker(
+                markerId: 'id',
+                position: LatLng(37.563600, 126.962370),
+                captionText: "커스텀 아이콘",
+                captionColor: Colors.indigo,
+                captionTextSize: 20.0,
+                alpha: 0.8,
+                icon: image,
+                anchor: AnchorPoint(0.5, 1),
+                width: 45,
+                height: 45,
+                infoWindow: '인포 윈도우',
+                onMarkerTab: _onMarkerTap));
+          });
+        }
+      },
+    );
     super.initState();
   }
 

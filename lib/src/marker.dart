@@ -134,7 +134,7 @@ class Marker {
   double angle;
 
   /// 아이콘을 지정합니다.
-  OverlayImage icon;
+  AssetImage icon;
 
   /// 캡션에 원근 효과를 적용할지 여부를 반환합니다.
   /// 원근 효과를 적용할 경우 가까운 캡션은 크게, 먼 캡션은 작게 표시됩니다.
