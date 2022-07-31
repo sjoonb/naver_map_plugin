@@ -107,6 +107,9 @@ class NaverMarkerController {
             final Object anchor = json.get("anchor");
             if (anchor != null) marker.setAnchor(Convert.toPoint(anchor));
 
+            final Object isHideCollidedCaptions = json.get("isHideCollidedCaptions");
+            if (isHideCollidedCaptions != null) marker.setHideCollidedCaptions((Boolean) isHideCollidedCaptions);
+
             final Object captionText = json.get("captionText");
             if (captionText != null) marker.setCaptionText((String) captionText);
 

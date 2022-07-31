@@ -37,6 +37,8 @@ class Marker {
   /// InvalidCoordinateException이 발생합니다.
   LatLng position;
 
+  bool isHideCollidedCaptions;
+
   /// 캡션의 텍스트를 지정합니다. 빈 문자열일 경우 캡션이 그려지지 않습니다.
   /// -
   /// 기본값은 빈 문자열입니다.
@@ -178,6 +180,7 @@ class Marker {
       this.flat,
       this.onMarkerTab,
       this.icon,
+      this.isHideCollidedCaptions,
       this.captionText,
       this.captionTextSize,
       this.captionColor,
@@ -218,6 +221,7 @@ class Marker {
     addIfPresent('alpha', alpha);
     addIfPresent('flat', flat);
     addIfPresent('position', position?._toJson());
+    addIfPresent('isHideCollidedCaptions', isHideCollidedCaptions);
     addIfPresent('captionText', captionText);
     addIfPresent('captionTextSize', captionTextSize);
     addIfPresent('captionColor', captionColor?.value);
@@ -258,6 +262,7 @@ class Marker {
         position == typedOther.position &&
         zIndex == typedOther.zIndex &&
         globalZIndex == typedOther.globalZIndex &&
+        isHideCollidedCaptions == typedOther.isHideCollidedCaptions &&
         captionText == typedOther.captionText &&
         captionTextSize == typedOther.captionTextSize &&
         captionColor == typedOther.captionColor &&
@@ -288,6 +293,7 @@ class Marker {
         height: height,
         alpha: alpha,
         angle: angle,
+        isHideCollidedCaptions: isHideCollidedCaptions,
         captionColor: captionColor,
         captionHaloColor: captionHaloColor,
         captionMaxZoom: captionMaxZoom,

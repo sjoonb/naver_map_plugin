@@ -36,6 +36,9 @@ class NMarkerController: NSObject {
         if let flat = json["flat"] as? Bool {
             marker.isFlat = flat
         }
+        if let isHideCollidedCaptions = json["isHideCollidedCaptions"] as? Bool {
+            marker.isHideCollidedCaptions = isHideCollidedCaptions
+        }
         if let captionText = json["captionText"] as? String {
             marker.captionText = captionText
         }
