@@ -556,6 +556,21 @@ public class NaverMapController implements
     }
 
     @Override
+    public void setMinZoomLevel(double minZoomLevel) {
+        naverMap.setMinZoom(minZoomLevel);
+    }
+
+    @Override
+    public void setMaxZoomLevel(double maxZoomLevel) {
+        naverMap.setMaxZoom(maxZoomLevel);
+    }
+
+    @Override
+    public void setExtent(LatLngBounds extent) {
+        naverMap.setExtent(extent);
+    }
+
+    @Override
     public void setRotationGestureEnable(boolean rotationGestureEnable) {
         naverMap.getUiSettings().setRotateGesturesEnabled(rotationGestureEnable);
     }

@@ -20,6 +20,10 @@ protocol NaverMapOptionSink {
     func setActiveLayers(_ activeLayers: Array<Any>)
     func setContentPadding(_ paddingData: Array<CGFloat>)
     
+    func setMinZoomLevel(_ minZoomLevel: CGFloat)
+    func setMaxZoomLevel(_ maxZoomLevel: CGFloat)
+    func setExtent(_ extent: NMGLatLngBounds)
+    
     func setRotationGestureEnable(_ rotationGestureEnable: Bool)
     func setScrollGestureEnable(_ scrollGestureEnable: Bool)
     func setTiltGestureEnable(_ tiltGestureEnable: Bool)
@@ -316,6 +320,15 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let layers = option["activeLayers"] as? Array<Any> {
             sink.setActiveLayers(layers)
         }
+        if let minZoomLevel = option["minZoomLevel"] as? CGFloat {
+            sink.setMinZoomLevel(minZoomLevel)
+        }
+        if let maxZoomLevel = option["maxZoomLevel"] as? CGFloat {
+            sink.setMaxZoomLevel(maxZoomLevel)
+        }
+        if let extent = option["extent"] {
+            sink.setExtent(toLatLngBounds(json: extent))
+        }
         if let rotationGestureEnable = option["rotationGestureEnable"] as? Bool {
             sink.setRotationGestureEnable(rotationGestureEnable)
         }
@@ -436,6 +449,18 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                 return
             }
         }
+    }
+    
+    func setMinZoomLevel(_ minZoomLevel: CGFloat) {
+        mapView.minZoomLevel = minZoomLevel
+    }
+    
+    func setMaxZoomLevel(_ maxZoomLevel: CGFloat) {
+        mapView.maxZoomLevel = maxZoomLevel
+    }
+    
+    func setExtent(_ extent: NMGLatLngBounds) {
+        mapView.extent = extent
     }
     
     func setRotationGestureEnable(_ rotationGestureEnable: Bool) {

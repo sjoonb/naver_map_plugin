@@ -1,5 +1,7 @@
 package map.naver.plugin.net.lbstech.naver_map_plugin;
 
+import com.naver.maps.geometry.LatLngBounds;
+
 import java.util.List;
 
 public interface NaverMapOptionSink {
@@ -26,6 +28,12 @@ public interface NaverMapOptionSink {
     /**
      * flutter 에서 setState()로 값을 변경해도 반영되지 않는 method. 최초 생성시에만 값변경.
      */
+    void setMinZoomLevel(double minZoomLevel);
+
+    void setMaxZoomLevel(double maxZoomLevel);
+
+    void setExtent(LatLngBounds extent);
+
     void setRotationGestureEnable(boolean rotationGestureEnable);
 
     void setScrollGestureEnable(boolean scrollGestureEnable);

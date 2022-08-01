@@ -46,6 +46,12 @@ class Convert {
             sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnable"));
         if (options.containsKey("zoomGestureEnable"))
             sink.setZoomGestureEnable((Boolean) options.get("zoomGestureEnable"));
+        if (options.containsKey("minZoomLevel"))
+            sink.setMinZoomLevel((double) options.get("minZoomLevel"));
+        if (options.containsKey("maxZoomLevel"))
+            sink.setMaxZoomLevel((double) options.get("maxZoomLevel"));
+        if (options.containsKey("extent"))
+            sink.setExtent((LatLngBounds) toLatLngBounds(options.get("extent")));
         if (options.containsKey("rotationGestureEnable"))
             sink.setRotationGestureEnable((Boolean) options.get("rotationGestureEnable"));
         if (options.containsKey("tiltGestureEnable"))

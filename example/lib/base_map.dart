@@ -40,6 +40,12 @@ class _BaseMapPageState extends State<BaseMapPage> {
             onMapDoubleTap: _onMapDoubleTap,
             onMapTwoFingerTap: _onMapTwoFingerTap,
             onSymbolTap: _onSymbolTap,
+            minZoomLevel: 5.0,
+            maxZoomLevel: 18.0,
+            extent: LatLngBounds(
+              southwest: LatLng(31.43, 122.37),
+              northeast: LatLng(44.35, 132),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(16),

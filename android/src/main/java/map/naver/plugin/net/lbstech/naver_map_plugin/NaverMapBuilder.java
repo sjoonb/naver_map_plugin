@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.renderscript.Double3;
 
+import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 
@@ -166,6 +167,21 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                     break;
             }
         }
+    }
+
+    @Override
+    public void setMinZoomLevel(double minZoomLevel) {
+        options.minZoom(minZoomLevel);
+    }
+
+    @Override
+    public void setMaxZoomLevel(double maxZoomLevel) {
+        options.maxZoom(maxZoomLevel);
+    }
+
+    @Override
+    public void setExtent(LatLngBounds extent) {
+        options.extent(extent);
     }
 
     @Override

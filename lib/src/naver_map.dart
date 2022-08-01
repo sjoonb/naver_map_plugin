@@ -23,6 +23,9 @@ class NaverMap extends StatefulWidget {
     this.buildingHeight = 1.0,
     this.symbolScale = 1.0,
     this.symbolPerspectiveRatio = 1.0,
+    this.minZoomLevel = 5.0,
+    this.maxZoomLevel = 18.0,
+    this.extent,
     this.rotationGestureEnable = true,
     this.scrollGestureEnable = true,
     this.tiltGestureEnable = true,
@@ -119,6 +122,12 @@ class NaverMap extends StatefulWidget {
   /// 0~1의 비율로 지정할 수 있으며, 값이 작을수록 원근감이 줄어들어 0이 되면
   /// 원근 효과가 완전히 사라집니다. 기본값은 1입니다.
   final double symbolPerspectiveRatio;
+
+  final double minZoomLevel;
+
+  final double maxZoomLevel;
+
+  final LatLngBounds extent;
 
   /// NaveraMap 최초 생성 이후,
   /// flutter에서 setState() 함수로 값을 변경해도 반영 되지 않는다.
@@ -392,6 +401,9 @@ class _NaverMapOptions {
     this.zoomGestureEnable,
     this.tiltGestureEnable,
     this.scrollGestureEnable,
+    this.minZoomLevel,
+    this.maxZoomLevel,
+    this.extent,
     this.rotationGestureEnable,
     this.initLocationTrackingMode,
     this.locationButtonEnable,
@@ -408,6 +420,9 @@ class _NaverMapOptions {
       buildingHeight: map.buildingHeight,
       symbolScale: map.symbolScale,
       symbolPerspectiveRatio: map.symbolPerspectiveRatio,
+      minZoomLevel: map.minZoomLevel,
+      maxZoomLevel: map.maxZoomLevel,
+      extent: map.extent,
       rotationGestureEnable: map.rotationGestureEnable,
       scrollGestureEnable: map.scrollGestureEnable,
       tiltGestureEnable: map.tiltGestureEnable,
@@ -426,6 +441,9 @@ class _NaverMapOptions {
   final double buildingHeight;
   final double symbolScale;
   final double symbolPerspectiveRatio;
+  final double minZoomLevel;
+  final double maxZoomLevel;
+  final LatLngBounds extent;
   final bool rotationGestureEnable;
   final bool scrollGestureEnable;
   final bool tiltGestureEnable;
@@ -456,6 +474,9 @@ class _NaverMapOptions {
     addIfNonNull('symbolPerspectiveRatio', symbolPerspectiveRatio);
     addIfNonNull('scrollGestureEnable', scrollGestureEnable);
     addIfNonNull('zoomGestureEnable', zoomGestureEnable);
+    addIfNonNull('minZoomLevel', minZoomLevel);
+    addIfNonNull('maxZoomLevel', maxZoomLevel);
+    addIfNonNull('extent', extent._toList());
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
