@@ -49,6 +49,16 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     }
 }
 
+public func toCameraUpdateAnimation(json: Any) -> NMFCameraUpdateAnimation {
+    let type = json as! String
+    switch type {
+        case "easeIn":
+            return NMFCameraUpdateAnimation.easeIn
+        default:
+            return NMFCameraUpdateAnimation.none
+    }
+}
+
 public func toColor(colorNumber: NSNumber) -> UIColor {
     let value = colorNumber.uint64Value
     let red = CGFloat(exactly: (value & 0xFF0000) >> 16)! / 255.0

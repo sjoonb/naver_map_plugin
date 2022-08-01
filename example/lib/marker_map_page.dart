@@ -172,15 +172,12 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
     }
   }
 
-  void _onMarkerTap(Marker marker, Map<String, int> iconSize) {
+  Future<void> _onMarkerTap(Marker marker, Map<String, int> iconSize) async {
     int pos = _markers.indexWhere((m) => m.markerId == marker.markerId);
-    setState(() {
-      _markers[pos].captionText = '선택됨';
-    });
-    if (_currentMode == MODE_REMOVE) {
-      setState(() {
-        _markers.removeWhere((m) => m.markerId == marker.markerId);
-      });
-    }
+    final controller = await _controller.future;
+    final cameraUpdate =
+        CameraUpdate.toCameraPosition(CameraPosition(target: marker.position));
+    cameraUpdate.animation = CameraUpdateAnimation.easeIn;
+    controller.moveCamera(cameraUpdate);
   }
 }

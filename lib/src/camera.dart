@@ -74,6 +74,8 @@ class CameraPosition {
 class CameraUpdate {
   final dynamic _json;
 
+  CameraUpdateAnimation animation = CameraUpdateAnimation.none;
+
   CameraUpdate._(this._json);
 
   dynamic _toJson() => _json;
@@ -143,4 +145,10 @@ enum CameraChangeReason {
 
   /// 위치 트래킹 기능으로 인해 카메라가 움직였음을 나타낸다.
   location,
+}
+
+enum CameraUpdateAnimation {
+  none,
+
+  easeIn,
 }

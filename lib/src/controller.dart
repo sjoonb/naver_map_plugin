@@ -174,6 +174,7 @@ class NaverMapController {
   Future<void> moveCamera(CameraUpdate cameraUpdate) async {
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate': cameraUpdate._toJson(),
+      'cameraUpdateAnimation': cameraUpdate.animation.name,
     });
   }
 

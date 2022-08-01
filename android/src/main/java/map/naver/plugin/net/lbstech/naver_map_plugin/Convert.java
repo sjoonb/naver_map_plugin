@@ -6,6 +6,7 @@ import android.graphics.PointF;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
+import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -126,6 +127,16 @@ class Convert {
                 return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)), px);
             default:
                 throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
+        }
+    }
+
+    static CameraAnimation toCameraUpdateAnimation(Object o) {
+        final String type = (String) o;
+        switch (type) {
+            case "easeIn":
+                return CameraAnimation.Easing;
+            default:
+                return CameraAnimation.None;
         }
     }
 

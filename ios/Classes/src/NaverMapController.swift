@@ -156,6 +156,8 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         case "camera#move" :
             if let arg = call.arguments as? NSDictionary {
                 let update = toCameraUpdate(json: arg["cameraUpdate"]!)
+                let animation = toCameraUpdateAnimation(json: arg["cameraUpdateAnimation"]!)
+                update.animation = animation
                 mapView.moveCamera(update)
             }
             result(nil)
