@@ -238,12 +238,6 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _controller.future.then((value) => value.clearMapView());
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> createParams = <String, dynamic>{
       'initialCameraPosition': widget.initialCameraPosition?.toMap(),
