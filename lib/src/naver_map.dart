@@ -476,7 +476,9 @@ class _NaverMapOptions {
     addIfNonNull('zoomGestureEnable', zoomGestureEnable);
     addIfNonNull('minZoomLevel', minZoomLevel);
     addIfNonNull('maxZoomLevel', maxZoomLevel);
-    addIfNonNull('extent', extent._toList());
+    if (extent != null) {
+      addIfNonNull('extent', extent._toList());
+    }
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
