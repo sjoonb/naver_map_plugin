@@ -271,7 +271,8 @@ public class NaverMapController implements
             case "camera#move": {
                 if (naverMap != null) {
                     CameraUpdate update = Convert.toCameraUpdate(methodCall.argument("cameraUpdate"), density);
-                    update.animate(CameraAnimation.Easing);
+                    CameraAnimation animation = Convert.toCameraUpdateAnimation(methodCall.argument("cameraUpdateAnimation"));
+                    update.animate(animation);
                     naverMap.moveCamera(update);
                     result.success(null);
                 } else result.error("네이버맵 초기화 안됨.",
