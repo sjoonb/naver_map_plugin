@@ -34,6 +34,11 @@ class NaverMapController {
   /// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
   LocationOverlay locationOverlay;
 
+  Future<void> clearMapView() async {
+    await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
+    debugPrint("clearMapView done");
+  }
+
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'marker#onTap':
