@@ -81,6 +81,9 @@ class NMarkerController: NSObject {
         if let captionOffset = json["captionOffset"] as? CGFloat {
             marker.captionOffset = captionOffset
         }
+        if let isHideCollidedCaptions = json["isHideCollidedCaptions"] as? Bool {
+            marker.isHideCollidedCaptions = isHideCollidedCaptions
+        }
         if let isCaptionPerspectiveEnable = json["captionPerspectiveEnabled"] as? Bool {
             marker.iconPerspectiveEnabled = isCaptionPerspectiveEnable
         }
@@ -182,9 +185,8 @@ class NaverMarkersController: NSObject {
                 infoWindow.open(with: marker.marker)
                 infoWindowMarkerId = marker.id
             }
-            return true
         }
-        return false
+        return true
     }
     
 }

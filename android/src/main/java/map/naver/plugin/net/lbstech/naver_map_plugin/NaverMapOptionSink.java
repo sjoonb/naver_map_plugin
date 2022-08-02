@@ -1,8 +1,8 @@
 package map.naver.plugin.net.lbstech.naver_map_plugin;
 
-import com.naver.maps.geometry.LatLngBounds;
-
 import java.util.List;
+
+import com.naver.maps.geometry.LatLngBounds;
 
 public interface NaverMapOptionSink {
     void setNightModeEnable(boolean nightModeEnable);

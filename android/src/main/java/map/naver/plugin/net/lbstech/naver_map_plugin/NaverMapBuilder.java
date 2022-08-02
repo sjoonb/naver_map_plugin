@@ -42,7 +42,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
             Context context,
             AtomicInteger state,
             BinaryMessenger binaryMessenger,
-            Activity activity){
+            Activity activity) {
 
         final NaverMapController controller = new NaverMapController(
                 id,
@@ -58,6 +58,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         controller.init();
         controller.setLocationTrackingMode(locationTrackingMode);
         controller.setContentPadding(paddingData);
+
         return controller;
     }
 
@@ -106,7 +107,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     }
 
     @Override
-    public void setSymbolPerspectiveRatio (double symbolPerspectiveRatio){
+    public void setSymbolPerspectiveRatio(double symbolPerspectiveRatio) {
         options.symbolPerspectiveRatio((float) symbolPerspectiveRatio);
     }
 
@@ -228,23 +229,25 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
-    void setViewType(boolean isReleaseMode) {
-        if (isReleaseMode) options.useTextureView(false);
-        else options.useTextureView(true);
+    void setViewType(boolean useSurface) {
+        options.useTextureView(!useSurface);
     }
 
     void setInitialMarkers(List initialMarkers) {
         this.initialMarkers = initialMarkers;
     }
 
-    void setInitialCircles(List initialCircles) { this.initialCircles = initialCircles; }
+    void setInitialCircles(List initialCircles) {
+        this.initialCircles = initialCircles;
+    }
 
     void setInitialPaths(List<Object> initialPaths) {
         this.initialPaths = initialPaths;
     }
 
-    void setInitialPolygon(List initialPolygon){
+    void setInitialPolygon(List initialPolygon) {
         this.initialPolygon = initialPolygon;
     }
+
 
 }

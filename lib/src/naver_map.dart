@@ -31,6 +31,7 @@ class NaverMap extends StatefulWidget {
     this.tiltGestureEnable = true,
     this.zoomGestureEnable = true,
     this.locationButtonEnable = false,
+    this.useSurface = false,
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.contentPadding,
     this.markers = const [],
@@ -128,6 +129,8 @@ class NaverMap extends StatefulWidget {
   final double maxZoomLevel;
 
   final LatLngBounds? extent;
+
+  final bool useSurface;
 
   /// NaveraMap 최초 생성 이후,
   /// flutter에서 setState() 함수로 값을 변경해도 반영 되지 않는다.
@@ -259,6 +262,27 @@ class _NaverMapState extends State<NaverMap> {
         creationParamsCodec: const StandardMessageCodec(),
       );
       return view;
+
+      /// todo: waiting for most people use flutter version higher than 1.22.2
+      // return PlatformViewLink(
+      //   viewType: VIEW_TYPE,
+      //   surfaceFactory: (context, controller) => AndroidViewSurface(
+      //     controller: controller,
+      //     hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+      //     gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+      //   ),
+      //   onCreatePlatformView: (params) {
+      //     return PlatformViewsService.initSurfaceAndroidView(
+      //       id: params.id,
+      //       viewType: params.viewType,
+      //       creationParams: createParams,
+      //       creationParamsCodec: const StandardMessageCodec(),
+      //       layoutDirection: TextDirection.ltr,
+      //     )
+      //       ..addOnPlatformViewCreatedListener(onPlatformViewCreated)
+      //       ..create();
+      //   },
+      // );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
         viewType: VIEW_TYPE,
@@ -327,7 +351,6 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   void _markerTapped(String markerId, int? iconWidth, int? iconHeight) {
-    assert(markerId != null);
     if (_markers[markerId]?.onMarkerTab != null) {
       _markers[markerId]!.onMarkerTab!(
         _markers[markerId],
@@ -337,7 +360,6 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   void _pathOverlayTapped(String pathId) {
-    assert(pathId != null);
     PathOverlayId pathOverlayId = PathOverlayId(pathId);
     if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
       _paths[pathOverlayId]!.onPathOverlayTab!(pathOverlayId);
@@ -345,36 +367,30 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   void _circleOverlayTapped(String overlayId) {
-    assert(overlayId != null);
     if (_circles[overlayId]?.onTap != null) {
       _circles[overlayId]!.onTap!(overlayId);
     }
   }
 
   void _polygonOverlayTapped(String overlayId) {
-    assert(overlayId != null);
     if (_polygons[overlayId]?.onTap != null) {
       _polygons[overlayId]!.onTap!(overlayId);
     }
   }
 
   void _mapTap(LatLng position) {
-    assert(position != null);
     widget.onMapTap?.call(position);
   }
 
   void _mapLongTap(LatLng position) {
-    assert(position != null);
     widget.onMapLongTap?.call(position);
   }
 
   void _mapDoubleTap(LatLng position) {
-    assert(position != null);
     widget.onMapDoubleTap?.call(position);
   }
 
   void _mapTwoFingerTap(LatLng position) {
-    assert(position != null);
     widget.onMapTwoFingerTap?.call(position);
   }
 
@@ -414,6 +430,7 @@ class _NaverMapOptions {
     this.initLocationTrackingMode,
     this.locationButtonEnable,
     this.contentPadding,
+    this.useSurface,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -436,6 +453,7 @@ class _NaverMapOptions {
       initLocationTrackingMode: map.initLocationTrackingMode,
       locationButtonEnable: map.locationButtonEnable,
       contentPadding: map.contentPadding,
+      useSurface: map.useSurface,
     );
   }
 
@@ -457,6 +475,7 @@ class _NaverMapOptions {
   final LocationTrackingMode? initLocationTrackingMode;
   final bool? locationButtonEnable;
   final EdgeInsets? contentPadding;
+  final bool? useSurface;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -489,6 +508,7 @@ class _NaverMapOptions {
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
+    addIfNonNull('useSurface', useSurface);
     addIfNonNull(
         'contentPadding',
         contentPadding != null

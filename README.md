@@ -4,6 +4,17 @@
 
 Plug-in which shows naver map on flutter project support Android and iOS.
 
+# **중요 공지** | Important Notice
+
+* **LBSTECH**에서 사용하기 위해 제작하기 시작하였으며 **Naver** 와는 무관함을 알립니다.   
+    **LBSTECH**의 서비스를 중단하기 전까지 사후관리됩니다 (개발자가 부족해서 원할히는 못해요 :cry:)
+    
+    
+* 원작자 부재로 [pub.dev](https://pub.dev/packages/naver_map_plugin) 업데이트를 못하고 있습니다.   
+    따라서 최신 업데이트를 사용하고자 하시면 번거롭더라도 ```github```을 등록하여 사용하시기를 권장합니다.   
+    
+* Can`t update to [pub.dev](https://pub.dev/packages/naver_map_plugin). Plz use github url.    
+
 ## Install
 
 해당 플러그인은 [Naver Cloud PlatForm - map][L1] 에서 제공하는 map서비스를 Android와 iOS 환경에서 보여주는 플러그인입니다. 
@@ -14,10 +25,13 @@ Plug-in which shows naver map on flutter project support Android and iOS.
 - 등록한 애플리케이션을 선택해 Client ID값을 확인하고 변경 화면에서 Maps가 선택되어 있는지 확인한다.
 
 pubspec.yaml에 plug in dependencies에 작성
+
 ``` yaml
 dependencies:
-  naver_map_plugin: ^0.9.4
+  naver_map_plugin:
+    git: https://github.com/LBSTECH/naver_map_plugin.git
 ```
+
 
 ### Warning
  - 지도에서 제공하는 기본 컨트롤러가 잘 작동하지 않는 문제 (이유를 찾지 못하고 있음)
@@ -100,16 +114,16 @@ $ git lfs install
 ``` 
 <dict>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
 </dict>
 ```
 
 
-> 이후 AppDelefate에서 위치 사용권한을 획득하는 예제.
+> 이후 AppDelegate에서 위치 사용권한을 획득하는 예제.
 ``` swift
 if (CLLocationManager.locationServicesEnabled()) {
     switch CLLocationManager.authorizationStatus() {

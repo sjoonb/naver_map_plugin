@@ -8,14 +8,9 @@ class _PathOverlayUpdates {
   Set<PathOverlayId>? pathOverlayIdsToRemove;
 
   _PathOverlayUpdates.from(
-      Set<PathOverlay> previous, Set<PathOverlay>? current) {
-    if (previous == null) {
-      previous = Set<PathOverlay>.identity();
-    }
-
-    if (current == null) {
-      current = Set<PathOverlay>.identity();
-    }
+      Set<PathOverlay>? previous, Set<PathOverlay>? current) {
+    previous ??= Set<PathOverlay>.identity();
+    current ??= Set<PathOverlay>.identity();
 
     final Map<PathOverlayId, PathOverlay> previousPathOverlays =
         _keyByPathOverlayId(previous);
@@ -65,10 +60,9 @@ class _PathOverlayUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final _PathOverlayUpdates typedOther = other as _PathOverlayUpdates;
-    return setEquals(
-            pathOverlaysToAddOrUpdate, typedOther.pathOverlaysToAddOrUpdate) &&
-        setEquals(pathOverlayIdsToRemove, typedOther.pathOverlayIdsToRemove);
+    return other is _PathOverlayUpdates &&
+        setEquals(pathOverlaysToAddOrUpdate, other.pathOverlaysToAddOrUpdate) &&
+        setEquals(pathOverlayIdsToRemove, other.pathOverlayIdsToRemove);
   }
 
   @override

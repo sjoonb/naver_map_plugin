@@ -40,6 +40,7 @@ class _PathMapPageState extends State<PathMapPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             _controlPanel(),
@@ -177,11 +178,6 @@ class _PathMapPageState extends State<PathMapPage> {
 
   void _onMapCreated(NaverMapController controller) {
     _controller.complete(controller);
-    final cameraUpdate = CameraUpdate.fitBounds(
-      LatLngBounds.fromLatLngList(_coordinates),
-      padding: 48,
-    );
-    cameraUpdate.animation = CameraUpdateAnimation.easeIn;
     controller.moveCamera(CameraUpdate.fitBounds(
       LatLngBounds.fromLatLngList(_coordinates),
       padding: 48,

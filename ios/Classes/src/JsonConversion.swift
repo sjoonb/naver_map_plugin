@@ -46,8 +46,8 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
         return NMFCameraUpdate(fit: toLatLngBounds(json: data[1]), padding: CGFloat(pt))
     default:
         return NMFCameraUpdate()
+        }
     }
-}
 
 public func toCameraUpdateAnimation(json: Any) -> NMFCameraUpdateAnimation {
     let type = json as! String

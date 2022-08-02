@@ -37,8 +37,6 @@ class Marker {
   /// InvalidCoordinateException이 발생합니다.
   LatLng? position;
 
-  bool? isHideCollidedCaptions;
-
   /// 캡션의 텍스트를 지정합니다. 빈 문자열일 경우 캡션이 그려지지 않습니다.
   /// -
   /// 기본값은 빈 문자열입니다.
@@ -145,6 +143,8 @@ class Marker {
   ///
   /// 기본값은 false입니다.
   bool? captionPerspectiveEnabled;
+
+  bool? isHideCollidedCaptions;
 
   /// 아이콘에 덧입힐 색상을 지정합니다. 덧입힐 색상을 지정하면 덧입힐 색상이
   /// 아이콘 이미지의 색상과 가산 혼합됩니다. 단, 덧입힐 색상의 알파는 무시됩니다.

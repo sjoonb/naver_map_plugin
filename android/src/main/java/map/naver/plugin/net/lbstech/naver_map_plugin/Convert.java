@@ -6,9 +6,9 @@ import android.graphics.PointF;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
-import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.overlay.OverlayImage;
 
 import java.util.ArrayList;
@@ -58,9 +58,9 @@ class Convert {
             sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnable"));
         if (options.containsKey("locationButtonEnable"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
-        if(options.containsKey("locationTrackingMode"))
+        if (options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
-        if(options.containsKey("contentPadding"))
+        if (options.containsKey("contentPadding"))
             sink.setContentPadding(toDoubleList(options.get("contentPadding")));
     }
 
@@ -78,7 +78,7 @@ class Convert {
     static List<Double> toDoubleList(Object o) {
         final List data = (List) o;
         ArrayList<Double> result = new ArrayList<>();
-        for(Object element : data) {
+        for (Object element : data) {
             if (element instanceof Double) {
                 result.add((Double) element);
             }
@@ -135,6 +135,8 @@ class Convert {
                 throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
         }
     }
+
+
 
     static CameraAnimation toCameraUpdateAnimation(Object o) {
         final String type = (String) o;
@@ -194,7 +196,7 @@ class Convert {
         final List<?> data = (List) o;
         final List<List<LatLng>> holes = new ArrayList<>(data.size());
 
-        for (Object ob: data) {
+        for (Object ob : data) {
             List<LatLng> hole = toCoords(ob);
             holes.add(hole);
         }
@@ -202,11 +204,11 @@ class Convert {
     }
 
     @SuppressWarnings("MalformedFormatString")
-    static int toColorInt(Object value){
+    static int toColorInt(Object value) {
         if (value instanceof Long || value instanceof Integer) {
             String formed = String.format("#%08x", value);
             return Color.parseColor(formed);
-        }else {
+        } else {
             return 0;
         }
     }

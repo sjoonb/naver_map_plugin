@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -29,8 +30,10 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
                 position: LatLng(37.563600, 126.962370),
                 captionText: "커스텀 아이콘",
                 captionColor: Colors.indigo,
+                isHideCollidedCaptions: true,
                 captionTextSize: 20.0,
                 alpha: 0.8,
+                captionOffset: 30,
                 icon: image,
                 anchor: AnchorPoint(0.5, 1),
                 width: 45,
@@ -48,6 +51,7 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             _controlPanel(),
@@ -165,6 +169,8 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
       _markers.add(Marker(
         markerId: DateTime.now().toIso8601String(),
         position: latLng,
+        isHideCollidedCaptions: true,
+        captionText: "커스텀 아이콘",
         infoWindow: '테스트',
         onMarkerTab: _onMarkerTap,
       ));
