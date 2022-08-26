@@ -208,14 +208,11 @@ public class NaverMapController implements
     @SuppressWarnings({"ConstantConditions"})
     @Override
     public void onMethodCall(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        Log.e("onMethodCall", methodCall.toString());
         switch (methodCall.method) {
             case "map#clearMapView": {
                 mapView = null;
                 naverMap = null;
-                markerController = null;
-                polygonController = null;
-                pathsController = null;
-                circleController = null;
                 methodChannel = null;
                 initialMarkers = null;
                 initialPaths = null;
@@ -223,6 +220,12 @@ public class NaverMapController implements
                 initialPolygons = null;
                 mapReadyResult = null;
                 paddingData = null;
+
+                pathsController = null;
+                markerController = null;
+                circleController = null;
+                polygonController = null;
+
                 Log.e("clearMapView", "NaverMapController 인스턴스 속성, 메모리 해제");
             }
             break;
@@ -273,7 +276,6 @@ public class NaverMapController implements
                     CameraUpdate update = Convert.toCameraUpdate(methodCall.argument("cameraUpdate"), density);
                     CameraAnimation animation = Convert.toCameraUpdateAnimation(methodCall.argument("cameraUpdateAnimation"));
                     update.animate(animation);
-                    naverMap.moveCamera(update);
                     result.success(null);
                 } else result.error("네이버맵 초기화 안됨.",
                         "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",

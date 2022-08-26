@@ -95,9 +95,6 @@ class NaverMapController {
   }
 
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다
-  /// 현재, IOS 기기에서 네이버 맵 인스턴스 해제가 되지 않는 이슈가 있어, 이 Method는 IOS 플랫폼에서만 지원 합니다.
-  /// (안드로이드 기기는 자동 해제됩니다.)
-  /// Ex) Platform.isIOS 조건문 이용
   Future<void> clearMapView() async {
     await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
   }
