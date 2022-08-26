@@ -227,6 +227,7 @@ public class NaverMapController implements
                 polygonController = null;
 
                 Log.e("clearMapView", "NaverMapController 인스턴스 속성, 메모리 해제");
+                result.success(true);
             }
             break;
             case "map#waitForMap": {

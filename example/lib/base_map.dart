@@ -17,6 +17,16 @@ class _BaseMapPageState extends State<BaseMapPage> {
   LocationTrackingMode _trackingMode = LocationTrackingMode.NoFollow;
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.future.then(
+      (value) {
+        value.clearMapView();
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
