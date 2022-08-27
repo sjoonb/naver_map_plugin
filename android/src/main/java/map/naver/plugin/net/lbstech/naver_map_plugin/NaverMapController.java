@@ -50,9 +50,9 @@ public class NaverMapController implements
         Application.ActivityLifecycleCallbacks,
         NaverMapOptionSink {
 
-    private MapView mapView;
+    private final MapView mapView;
     private final AtomicInteger activityState;
-    private MethodChannel methodChannel;
+    private final MethodChannel methodChannel;
     private final int registrarActivityHashCode;
     private final Activity activity;
     private List initialMarkers;

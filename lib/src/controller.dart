@@ -7,6 +7,8 @@ class NaverMapController {
     locationOverlay = LocationOverlay(this);
   }
 
+  bool disposed = false;
+
   static Future<NaverMapController> init(
       int id,
       CameraPosition? initialCameraPosition,
@@ -97,9 +99,13 @@ class NaverMapController {
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다
   Future<void> clearMapView() async {
     await _channel.invokeMethod('map#clearMapView');
+    disposed = true;
   }
 
   Future<void> _updateMapOptions(Map<String, dynamic> optionsUpdate) async {
+    if (disposed) {
+      return;
+    }
     await _channel.invokeMethod(
       'map#update',
       <String, dynamic>{
@@ -109,6 +115,9 @@ class NaverMapController {
   }
 
   Future<void> _updateMarkers(_MarkerUpdates markerUpdate) async {
+    if (disposed) {
+      return;
+    }
     await _channel.invokeMethod<void>(
       'markers#update',
       markerUpdate._toMap(),
@@ -117,6 +126,9 @@ class NaverMapController {
 
   Future<void> _updatePathOverlay(
       _PathOverlayUpdates pathOverlayUpdates) async {
+    if (disposed) {
+      return;
+    }
     await _channel.invokeMethod(
       'pathOverlay#update',
       pathOverlayUpdates._toMap(),
@@ -125,6 +137,9 @@ class NaverMapController {
 
   Future<void> _updateCircleOverlay(
       _CircleOverlayUpdate circleOverlayUpdate) async {
+    if (disposed) {
+      return;
+    }
     await _channel.invokeMethod(
       'circleOverlay#update',
       circleOverlayUpdate._toMap(),
@@ -133,6 +148,9 @@ class NaverMapController {
 
   Future<void> _updatePolygonOverlay(
       _PolygonOverlayUpdate polygonOverlayUpdate) async {
+    if (disposed) {
+      return;
+    }
     await _channel.invokeMethod(
       'polygonOverlay#update',
       polygonOverlayUpdate._toMap(),
