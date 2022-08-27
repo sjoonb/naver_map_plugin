@@ -56,31 +56,35 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         
         // property set
         naverMap = NMFNaverMapView(frame: frame)
-        mapView = naverMap!.mapView
+        mapView = naverMap?.mapView
         channel = FlutterMethodChannel(name: "naver_map_plugin_\(viewId)",
                                        binaryMessenger: registrar.messenger())
         super.init()
-        markersController = NaverMarkersController(naverMap: naverMap!,
-                                                   registrar: registrar,
-                                                   touchHandler: overlayTouchHandler(overlay:))
-        pathController = NaverPathController(naverMap: naverMap!,
-                                             registrar: registrar,
-                                             touchHandler: overlayTouchHandler(overlay:))
-        circleController = NaverCircleController(naverMap: naverMap!,
+        if let naverMap = naverMap {
+            markersController = NaverMarkersController(naverMap: naverMap,
+                                                       registrar: registrar,
+                                                       touchHandler: overlayTouchHandler(overlay:))
+            pathController = NaverPathController(naverMap: naverMap,
+                                                 registrar: registrar,
                                                  touchHandler: overlayTouchHandler(overlay:))
-        polygonController = NaverPolygonController(naverMap: naverMap!,
-                                                   touchHandler: overlayTouchHandler(overlay:))
+            circleController = NaverCircleController(naverMap: naverMap,
+                                                     touchHandler: overlayTouchHandler(overlay:))
+            polygonController = NaverPolygonController(naverMap: naverMap,
+                                                       touchHandler: overlayTouchHandler(overlay:))
+
+            
+        }
         channel?.setMethodCallHandler(handle(call:result:))
         
         // map view 설정
         NMFAuthManager.shared().delegate = self as NMFAuthManagerDelegate // for debug
 
-        mapView!.touchDelegate = self
-        mapView!.addCameraDelegate(delegate: self)
+        mapView?.touchDelegate = self
+        mapView?.addCameraDelegate(delegate: self)
         if let arg = argument {
             if let initialPositionData = arg["initialCameraPosition"] {
                 if initialPositionData is NSDictionary {
-                    mapView!.moveCamera(NMFCameraUpdate(position: toCameraPosition(json: initialPositionData)))
+                    mapView?.moveCamera(NMFCameraUpdate(position: toCameraPosition(json: initialPositionData)))
                 }
             }
             if let options = arg["options"] as? NSDictionary {
@@ -101,12 +105,12 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         }
         
         // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
-        naverMap!.showZoomControls = false
-        naverMap!.showIndoorLevelPicker = false
+        naverMap?.showZoomControls = false
+        naverMap?.showIndoorLevelPicker = false
     }
     
     func view() -> UIView {
-        return naverMap!
+        return naverMap ?? UIView()
     }
     
     func handle(call: FlutterMethodCall, result: FlutterResult) {
@@ -126,7 +130,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             result(nil)
             break
         case "map#update":
-            if let arg = call.arguments as! NSDictionary?, let option = arg["options"] as? NSDictionary {
+            if let arg = call.arguments as? NSDictionary?, let option = arg?["options"] as? NSDictionary {
                 interpretMapOption(option: option, sink: self)
                 result(true)
             } else {
@@ -134,27 +138,38 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             break
         case "map#type":
-            if let arg = call.arguments as! NSDictionary?, let type = arg["mapType"] as? Int {
+            if let arg = call.arguments as? NSDictionary?, let type = arg?["mapType"] as? Int {
                 setMapType(type)
                 result(nil)
             }
         case "map#getVisibleRegion":
+            if mapView == nil {
+                break
+            }
+
             let bounds = mapView!.contentBounds
             result(latlngBoundToJson(bound: bounds))
             break
         case "map#getPosition":
+            if mapView == nil {
+                break
+            }
+
             let position = mapView!.cameraPosition
             result(cameraPositionToJson(position: position))
             break
         case "tracking#mode":
-            if let arg = call.arguments as! NSDictionary? {
-                setLocationTrackingMode(arg["locationTrackingMode"] as! UInt)
+            if let arg = call.arguments as? NSDictionary?, let locationTrackingMode = arg?["locationTrackingMode"] as? UInt  {
+                setLocationTrackingMode(locationTrackingMode)
                 result(true)
             } else {
                 result(false)
             }
             break
         case "map#getSize" :
+            if mapView == nil {
+                break
+            }
             let width = CGFloat(mapView!.mapWidth)
             let height = CGFloat(mapView!.mapHeight)
             let resolution = UIScreen.main.nativeBounds.width / UIScreen.main.bounds.width
@@ -165,20 +180,23 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             result(data)
             break
         case "meter#dp" :
+            if mapView == nil {
+                break
+            }
             let meterPerPx = mapView!.projection.metersPerPixel().advanced(by: 0.0)
             let density = Double.init(UIScreen.main.scale)
             result(meterPerPx*density)
             break
         case "meter#px":
-            let meterPerPx = mapView!.projection.metersPerPixel().advanced(by: 0.0)
+            let meterPerPx = mapView?.projection.metersPerPixel().advanced(by: 0.0)
             result(meterPerPx)
             break
         case "camera#move" :
-            if let arg = call.arguments as? NSDictionary {
-                let update = toCameraUpdate(json: arg["cameraUpdate"]!)
-                let animation = toCameraUpdateAnimation(json: arg["cameraUpdateAnimation"]!)
+            if let arg = call.arguments as? NSDictionary, let cameraUpdate = arg["cameraUpdate"], let cameraUpdateAnimation = arg["cameraUpdateAnimation"] {
+                let update = toCameraUpdate(json: cameraUpdate)
+                let animation = toCameraUpdateAnimation(json: cameraUpdateAnimation)
                 update.animation = animation
-                mapView!.moveCamera(update)
+                mapView?.moveCamera(update)
             }
             result(nil)
             break
@@ -187,7 +205,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             let fileName = "\(NSUUID().uuidString).jpg"
             if let tmpFileUrl = NSURL.fileURL(withPathComponents: [dir, fileName]) {
                 DispatchQueue.main.async {
-                    self.naverMap!.takeSnapShot({ (image) in
+                    self.naverMap?.takeSnapShot({ (image) in
                         if let data = image.jpegData(compressionQuality: 1.0) ?? image.pngData() {
                             do{
                                 try data.write(to: tmpFileUrl)
@@ -207,7 +225,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             if let arg = call.arguments as? NSDictionary {
                 if let top = arg["top"] as? CGFloat, let left = arg["left"] as? CGFloat,
                    let right = arg["right"] as? CGFloat, let bottom = arg["bottom"] as? CGFloat {
-                    mapView!.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+                    mapView?.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
                 }
             }
             result(nil)
@@ -267,13 +285,13 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         case "LO#set#position" :
             if let arg = call.arguments as? NSDictionary, let data = arg["position"] {
                 let latLng = toLatLng(json: data)
-                mapView!.locationOverlay.location = latLng
+                mapView?.locationOverlay.location = latLng
             }
             result(nil)
             break
         case "LO#set#bearing" :
             if let arg = call.arguments as? NSDictionary, let bearing = arg["bearing"] as? NSNumber {
-                mapView!.locationOverlay.heading = CGFloat(bearing.floatValue)
+                mapView?.locationOverlay.heading = CGFloat(bearing.floatValue)
             }
             result(nil)
             break
@@ -374,6 +392,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
     
     func mapView(_ mapView: NMFMapView, didTap symbol: NMFSymbol) -> Bool {
+        if (symbol.caption == nil) {
+            return false
+        }
         channel?.invokeMethod("map#onSymbolClick",
                               arguments: ["position" : latlngToJson(latlng: symbol.position),
                                           "caption" : symbol.caption!])
@@ -382,11 +403,11 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     // naver overlay touch handler
     func overlayTouchHandler(overlay: NMFOverlay) -> Bool {
-        if let marker = overlay.userInfo["marker"] as? NMarkerController {
+        if let marker = overlay.userInfo["marker"] as? NMarkerController, let markersController = markersController {
             channel?.invokeMethod("marker#onTap", arguments: ["markerId" : marker.id,
                                                               "iconWidth" :  pxFromPt(marker.marker.width),
                                                               "iconHeight" : pxFromPt(marker.marker.height)])
-            return markersController!.toggleInfoWindow(marker)
+            return markersController.toggleInfoWindow(marker)
         } else if let path = overlay.userInfo["path"] as? NPathController {
             channel?.invokeMethod("path#onTap",
                                   arguments: ["pathId" , path.id])
@@ -405,61 +426,62 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     // naver map option sink method
     func setIndoorEnable(_ indoorEnable: Bool) {
-        mapView!.isIndoorMapEnabled = indoorEnable
+        mapView?.isIndoorMapEnabled = indoorEnable
     }
     
     func setNightModeEnable(_ nightModeEnable: Bool) {
-        mapView!.isNightModeEnabled = nightModeEnable
+        mapView?.isNightModeEnabled = nightModeEnable
     }
     
     func setLiteModeEnable(_ liteModeEnable: Bool) {
-        mapView!.liteModeEnabled = liteModeEnable
+        mapView?.liteModeEnabled = liteModeEnable
     }
     
     func setMapType(_ typeIndex: Int) {
-        let type = NMFMapType(rawValue: typeIndex)!
-        mapView!.mapType = type
+        if let type = NMFMapType(rawValue: typeIndex) {
+            mapView?.mapType = type
+        }
     }
     
     func setBuildingHeight(_ buildingHeight: Float) {
-        mapView!.buildingHeight = buildingHeight
+        mapView?.buildingHeight = buildingHeight
     }
     
     func setSymbolScale(_ symbolScale: CGFloat) {
-        mapView!.symbolScale = symbolScale
+        mapView?.symbolScale = symbolScale
     }
     
     func setSymbolPerspectiveRatio(_ symbolPerspectiveRatio: CGFloat) {
-        mapView!.symbolPerspectiveRatio = symbolPerspectiveRatio
+        mapView?.symbolPerspectiveRatio = symbolPerspectiveRatio
     }
     
     func setActiveLayers(_ activeLayers: Array<Any>) {
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: false)
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: false)
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: false)
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: false)
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: false)
-        mapView!.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: false)
+        mapView?.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: false)
         activeLayers.forEach { (any) in
-            let index = any as! Int
+            let index = any as? Int
             switch index {
             case 0 :
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
                 break
             case 1:
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
                 break
             case 2:
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: true)
                 break
             case 3:
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: true)
                 break
             case 4:
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: true)
                 break
             case 5:
-                mapView!.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: true)
+                mapView?.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: true)
                 break
             default:
                 return
@@ -468,43 +490,45 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
     
     func setMinZoomLevel(_ minZoomLevel: CGFloat) {
-        mapView!.minZoomLevel = minZoomLevel
+        mapView?.minZoomLevel = minZoomLevel
     }
     
     func setMaxZoomLevel(_ maxZoomLevel: CGFloat) {
-        mapView!.maxZoomLevel = maxZoomLevel
+        mapView?.maxZoomLevel = maxZoomLevel
     }
     
     func setExtent(_ extent: NMGLatLngBounds) {
-        mapView!.extent = extent
+        mapView?.extent = extent
     }
     
     func setRotationGestureEnable(_ rotationGestureEnable: Bool) {
-        mapView!.isRotateGestureEnabled = rotationGestureEnable
+        mapView?.isRotateGestureEnabled = rotationGestureEnable
     }
     
     func setScrollGestureEnable(_ scrollGestureEnable: Bool) {
-        mapView!.isScrollGestureEnabled = scrollGestureEnable
+        mapView?.isScrollGestureEnabled = scrollGestureEnable
     }
     
     func setTiltGestureEnable(_ tiltGestureEnable: Bool) {
-        mapView!.isTiltGestureEnabled = tiltGestureEnable
+        mapView?.isTiltGestureEnabled = tiltGestureEnable
     }
     
     func setZoomGestureEnable(_ zoomGestureEnable: Bool) {
-        mapView!.isZoomGestureEnabled = zoomGestureEnable
+        mapView?.isZoomGestureEnabled = zoomGestureEnable
     }
     
     func setLocationTrackingMode(_ locationTrackingMode: UInt) {
-        mapView!.positionMode = NMFMyPositionMode(rawValue: locationTrackingMode)!
+        if let positionMode = NMFMyPositionMode(rawValue: locationTrackingMode) {
+            mapView?.positionMode = positionMode
+        }
     }
     
     func setContentPadding(_ paddingData: Array<CGFloat>) {
-        mapView!.contentInset = UIEdgeInsets(top: paddingData[1], left: paddingData[0], bottom: paddingData[3], right: paddingData[2])
+        mapView?.contentInset = UIEdgeInsets(top: paddingData[1], left: paddingData[0], bottom: paddingData[3], right: paddingData[2])
     }
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
-        naverMap!.showLocationButton = locationButtonEnable
+        naverMap?.showLocationButton = locationButtonEnable
     }
     
     // ===================== authManagerDelegate ========================
