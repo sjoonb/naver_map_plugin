@@ -96,7 +96,7 @@ class NaverMapController {
 
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다
   Future<void> clearMapView() async {
-    await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
+    await _channel.invokeMethod('map#clearMapView');
   }
 
   Future<void> _updateMapOptions(Map<String, dynamic> optionsUpdate) async {
