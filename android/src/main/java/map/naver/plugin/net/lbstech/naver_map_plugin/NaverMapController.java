@@ -211,9 +211,10 @@ public class NaverMapController implements
         Log.e("onMethodCall", methodCall.toString());
         switch (methodCall.method) {
             case "map#clearMapView": {
-                mapView = null;
-                naverMap = null;
-                methodChannel = null;
+
+                Log.e("clearMapView", "NaverMapController 인스턴스 속성, 메모리 해제");
+                dispose();
+
                 initialMarkers = null;
                 initialPaths = null;
                 initialCircles = null;
@@ -226,7 +227,6 @@ public class NaverMapController implements
                 circleController = null;
                 polygonController = null;
 
-                Log.e("clearMapView", "NaverMapController 인스턴스 속성, 메모리 해제");
                 result.success(true);
             }
             break;
