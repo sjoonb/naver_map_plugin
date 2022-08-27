@@ -277,6 +277,7 @@ public class NaverMapController implements
                     CameraUpdate update = Convert.toCameraUpdate(methodCall.argument("cameraUpdate"), density);
                     CameraAnimation animation = Convert.toCameraUpdateAnimation(methodCall.argument("cameraUpdateAnimation"));
                     update.animate(animation);
+                    naverMap.moveCamera(update);
                     result.success(null);
                 } else result.error("네이버맵 초기화 안됨.",
                         "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
