@@ -32,7 +32,7 @@ class NaverMap extends StatefulWidget {
     this.zoomGestureEnable = true,
     this.locationButtonEnable = false,
     this.useSurface = false,
-    this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
+    this.initLocationTrackingMode = LocationTrackingMode.None,
     this.contentPadding,
     this.markers = const [],
     this.circles = const [],
