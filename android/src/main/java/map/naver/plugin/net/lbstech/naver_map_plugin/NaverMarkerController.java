@@ -188,8 +188,14 @@ class NaverMarkerController {
             if (subCaptionRequestedWidth != null)
                 marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * NaverMarkerController.this.density));
 
-            final Object icon = json.get("icon");
-            if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));
+
+            final Object bytes = json.get("imageBytes");
+            if (bytes != null) {
+                marker.setIcon(Convert.byteToOverlayImage(bytes));
+            } else {
+                final Object icon = json.get("icon");
+                if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));
+            }
 
             final Object infoWindow = json.get("infoWindow");
             if (infoWindow != null) this.infoWindowText = (String)infoWindow;

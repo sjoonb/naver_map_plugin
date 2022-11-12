@@ -1,6 +1,9 @@
 package map.naver.plugin.net.lbstech.naver_map_plugin;
 
+
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
 
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.flutter.view.FlutterMain;
+import java.io.ByteArrayInputStream;
 
 @SuppressWarnings("rawtypes")
 class Convert {
@@ -180,6 +184,14 @@ class Convert {
         String key = FlutterMain.getLookupKeyForAsset(assetName);
         return OverlayImage.fromAsset(key);
     }
+
+    static OverlayImage byteToOverlayImage(Object o) {
+        byte[] bytes = (byte[]) o;
+        Bitmap bmp= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
+        return OverlayImage.fromBitmap(bmp);
+    }
+
 
     static List<LatLng> toCoords(Object o) {
         final List<?> data = (List) o;

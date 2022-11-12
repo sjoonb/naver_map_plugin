@@ -108,9 +108,15 @@ class NMarkerController: NSObject {
         if let subCaptionRequestedWidth = json["subCaptionRequestedWidth"] as? CGFloat {
             marker.subCaptionRequestedWidth = subCaptionRequestedWidth
         }
-        if let assetName = json["icon"] as? String,
-           let overlayImage = toOverlayImage(assetName:assetName, registrar: registrar) {
+        if let data = json["imageBytes"] as? FlutterStandardTypedData,
+           let overlayImage = toOverlayImage(data: data) {
             marker.iconImage = overlayImage
+            
+        } else {
+            if let assetName = json["icon"] as? String,
+               let overlayImage = toOverlayImage(assetName:assetName, registrar: registrar) {
+                marker.iconImage = overlayImage
+            }
         }
         if let infoWindowText = json["infoWindow"] as? String {
             self.infoWindowTitle = infoWindowText

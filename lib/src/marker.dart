@@ -133,8 +133,11 @@ class Marker {
   /// 시계 방향으로 회전합니다
   double? angle;
 
-  /// 아이콘을 지정합니다.
+  /// 아이콘을 AssetImage 지정합니다.
   AssetImage? icon;
+
+  /// 아이콘을 bytes 로 지정합니다. imageBytes 지정시 icon 은 무시됩니다.
+  Uint8List? imageBytes;
 
   /// 캡션에 원근 효과를 적용할지 여부를 반환합니다.
   /// 원근 효과를 적용할 경우 가까운 캡션은 크게, 먼 캡션은 작게 표시됩니다.
@@ -181,6 +184,7 @@ class Marker {
       this.flat,
       this.onMarkerTab,
       this.icon,
+      this.imageBytes,
       this.captionText,
       this.captionTextSize,
       this.captionColor,
@@ -243,6 +247,7 @@ class Marker {
     addIfPresent('subCaptionHaloColor', subCaptionHaloColor?.value);
     addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
     addIfPresent('icon', icon?.assetName);
+    addIfPresent('imageBytes', imageBytes);
     addIfPresent('infoWindow', infoWindow);
     addIfPresent('anchor', anchor?._json);
 
@@ -279,6 +284,7 @@ class Marker {
           minZoom == other.minZoom &&
           angle == other.angle &&
           icon == other.icon &&
+          imageBytes == other.imageBytes &&
           isHideCollidedCaptions == other.isHideCollidedCaptions &&
           captionPerspectiveEnabled == other.captionPerspectiveEnabled &&
           iconTintColor == other.iconTintColor &&
@@ -313,6 +319,7 @@ class Marker {
       minZoom.hashCode ^
       angle.hashCode ^
       icon.hashCode ^
+      imageBytes.hashCode ^
       isHideCollidedCaptions.hashCode ^
       captionPerspectiveEnabled.hashCode ^
       iconTintColor.hashCode ^
@@ -352,6 +359,7 @@ class Marker {
         subCaptionTextSize: subCaptionTextSize,
         zIndex: zIndex,
         icon: icon,
+        imageBytes: imageBytes,
         infoWindow: infoWindow,
         anchor: anchor);
   }
